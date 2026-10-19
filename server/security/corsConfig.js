@@ -42,8 +42,9 @@ export function corsMiddleware(req, res, next) {
   }
 
   const normalizedOrigin = origin.replace(/\/$/, '');
+  const isVercelDomain = /^https:\/\/[a-zA-Z0-9_.-]+\.vercel\.app$/.test(normalizedOrigin);
   const isAllowed = allowedOrigins.has(normalizedOrigin) ||
-    Boolean(process.env.ALLOW_VERCEL_PREVIEWS === 'true' && /^https:\/\/[a-zA-Z0-9_-]+\.vercel\.app$/.test(normalizedOrigin));
+    (process.env.ALLOW_VERCEL_PREVIEWS !== 'false' && isVercelDomain);
 
   if (isAllowed) {
     res.setHeader('Access-Control-Allow-Origin', origin);
