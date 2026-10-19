@@ -1,0 +1,36 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files & Secrets
+.env
+.env.*
+.env.example
+
+# Local SQLite & database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Storage & Upload directories (preserve directory structures with .gitkeep)
+server/data/uploads/*
+!server/data/uploads/.gitkeep
+server/data/resumes/*
+!server/data/resumes/.gitkeep
+server/data/documents/*
+!server/data/documents/.gitkeep
+
+# Test outputs & scratch files
+server/test_output/*
+!server/test_output/.gitkeep
+
+# System & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo

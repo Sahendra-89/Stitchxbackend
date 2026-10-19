@@ -1,0 +1,24 @@
+{
+  "name": "stitchx-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "StitchX Global Technology - Enterprise Backend REST API & Document Services",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node server/test_verification.js",
+    "test:security": "node server/test_security_suite.js",
+    "test:stitchx": "node server/test_stitchx_suite.js",
+    "test:pdf": "node server/test_pdf_formatting.js"
+  },
+  "dependencies": {
+    "docx": "^9.11.0",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.11.2",
+    "multer": "^2.4.0",
+    "resend": "^6.32.0"
+  }
+}
