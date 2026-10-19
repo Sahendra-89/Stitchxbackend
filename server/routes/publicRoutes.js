@@ -6,7 +6,9 @@ import {
   JobApplication,
   ContactEnquiry,
   ContactSettings,
+  DocClient,
 } from '../db.js';
+import { generateDocumentNumber } from '../services/docNumberService.js';
 import { resumeUpload } from '../uploadHandler.js';
 import { Resend } from 'resend';
 import dotenv from 'dotenv';
@@ -472,6 +474,27 @@ router.post('/contact', publicFormRateLimiter, async (req, res) => {
       assigned_to: '',
       ip_address: ip,
     });
+
+    // Also auto-sync lead into DocClient (so it appears in "Clients" module as well)
+    try {
+      const cleanEmail = email.toLowerCase().trim();
+      const existingClient = await DocClient.findOne({ email: cleanEmail });
+      if (!existingClient) {
+        const client_id = await generateDocumentNumber('client');
+        await DocClient.create({
+          client_id,
+          name: companyName || fullName,
+          contact_person: fullName,
+          email: cleanEmail,
+          phone: phone || '',
+          notes: `Lead from Website Contact Form\nService: ${service}\nBudget: ${budget || 'Not specified'}\nMessage: ${message}`,
+          status: 'active',
+          created_by: 'website_contact_form',
+        });
+      }
+    } catch (clientSyncErr) {
+      console.warn('[Contact -> DocClient Sync Note]', clientSyncErr.message);
+    }
 
     // Optional email notification if Resend API key is provided
     const resendApiKey = process.env.RESEND_API_KEY;
